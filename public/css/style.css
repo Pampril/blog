@@ -1,0 +1,48 @@
+@CHARSET "UTF-8";
+
+body 
+{
+	color: #F0E39E;
+	background: #2C2F22;
+	width:980px;
+}
+
+a 
+{
+	color: #FF6533;	
+}
+a:hover, a:focus 
+{
+	color: #FF4C00;
+}
+
+.article
+{	
+	width:500px;
+	height:500px;
+	margin-left:500px;
+}
+
+.login 
+{
+	background:black repeat-x;
+	background-position:top;
+	padding:5px;
+	position:fixed;
+	
+	width:980px;
+	left:0;
+	right:0;
+	top:0;
+	color:#FFF;
+	border-bottom:3px solid #FFF;
+	-moz-opacity:0.5;
+	opacity: 0.5;
+	filter:alpha(opacity=50);
+}
+
+.menu
+{	
+	text-decoration:none;
+	margin-top:10px;
+}

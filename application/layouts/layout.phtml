@@ -1,0 +1,39 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Blog</title>
+	<?php //echo $this->headLink()->appendStylesheet('/css/style.css') ?>
+	<link href="<?php echo $this->baseUrl('/css/style.css')?>" media="screen" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+	<div id="corps">	
+	
+		<div class="login">
+			<?php //echo $this->layout()->login; ?>			
+		</div>		
+	
+		<div id="entete">
+			<h1><a href="/">Blog</a></h1>		
+		</div>	
+		
+		<div class="menu">
+			<?php  echo $this->layout()->menu; ?>			
+		</div>	
+		
+		<div id="contenu">
+			<?php echo $this->layout()->content; ?>
+		</div>	
+		
+	</div>
+
+</body>
+
+<footer>
+	<div id="pied">
+		<p id="copyright">Cyril DOYEN &copy; 2012</p>
+	</div>
+</footer>
+
+</html>
