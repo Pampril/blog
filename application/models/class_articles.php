@@ -1,7 +1,7 @@
 <?php
-class Article extends Zend_Db_Table_Abstract
+class Articles extends Zend_Db_Table_Abstract
 {
-	protected $_name='article';
+	protected $_name='articles';
 	protected $_primary=array('id');
 }
 ?>

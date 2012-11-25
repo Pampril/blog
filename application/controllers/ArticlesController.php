@@ -20,14 +20,16 @@ class ArticlesController extends Zend_Controller_Action
     		}
     	}
     	
+    	//Envoi les données de l'article à la base de donnée
     	if(isset($_POST['Envoyer']))
     	{
     		echo'rentre dans le if';
-    		$article = new Article;
+    		
+    		$article = new Articles;
     	
     		$addarticle = $article->createRow();
     		$addarticle->id = '';
-    		$addarticle->date = '';
+    		$addarticle->date = '2010-10-12';
     		$addarticle->corps =$_POST['NewArticle'];
     		$addarticle->titre =$_POST['NewTitre'];
     		
@@ -45,6 +47,7 @@ class ArticlesController extends Zend_Controller_Action
        
     }
     
+    //Formulaire d'ajout d'article
     public function ajoutAction()
     {
     	// Créer un objet formulaire
@@ -77,17 +80,26 @@ class ArticlesController extends Zend_Controller_Action
     
     public function afficherAction()
     {
-    	 
+    	//affiche les articles 
+    	$article = new Articles;
+    	$lesArticles = $article->fetchAll();
+    	
+    	foreach($lesArticles as $unArticle)
+    	{
+    		$affichage = $unArticle->id;
+    	}
+    	
+    	$this->view->lesArticles=$lesArticles;
     }
     
     public function supprimerAction()
     {
-    	
+    	//supprime un article
     }
     
     public function modifierAction()
     {
-    	
+    	//modifie le contenu d'un article
     }
 
 
