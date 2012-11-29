@@ -89,7 +89,9 @@ class ArticlesController extends Zend_Controller_Action
     		$affichage = $unArticle->id;
     	}
     	
-    	$this->view->lesArticles=$lesArticles;
+    	$this->view->lesArticles=$lesArticles;    	
+    	$this->_helper->actionStack('afficher','commentaires','default',array());
+    	$this->_helper->actionStack('ajout','commentaires','default',array());    	
     }
     
     public function supprimerAction()

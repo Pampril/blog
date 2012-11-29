@@ -9,37 +9,52 @@ class CommentairesController extends Zend_Controller_Action
 		if(isset($valeur))
 		{
 			switch ($valeur)
-			{
-				case "ajout":
-					$this->_helper->actionStack('ajout', 'commentaires', 'default', array());
-					break;
+			{				
 				case "afficher":
 					$this->_helper->actionStack('afficher', 'commentaires', 'default', array());
+					break;
+				case "ajout":
+					$this->_helper->actionStack('ajout', 'commentaires', 'default', array());
 					break;
 			}
 		}
 		 
-//   	if(isset($_POST['Envoyer']))
-//     	{
-//     		$article = new Article;
+  	if(isset($_POST['Envoyer']))
+    	{
+    		$commentaire = new Commentaires;
 		 
-//     		$addarticle = $commentaire->createRow();
-//     		$addarticle->id= '';
-//     		$addarticle->date_publication = '';
-//     		$addarticle->corps = $_POST['NewArticle'];
-//     		$addarticle->titre = $_POST['NewTitre'];
+    		$addcommentaire = $commentaire->createRow();
+    		$addcommentaire->id= '';
+    		$addcommentaire->date = '2010-10-12';
+    		$addcommentaire->commentaire = $_POST['NewCom'];
+    		$addcommentaire->idArticle = '3';
 
 	 
-//     		if(!empty($addarticle->corps))
-//     		{
-//     			$addarticle->save();
-//     			echo "Article ajouté";
-//     		}
-//     		else
-//     		{
-//     			echo"Erreur d'ajout";
-//     		}
-//     	}
+    		if(!empty($addcommentaire->commentaire))
+    		{
+    			$addcommentaire->save();
+    			echo "Commentaire enregistré";
+    		}
+    		else
+    		{
+    			echo"Erreur d'ajout";
+    		}
+    	}
+	}
+	
+	public function afficherAction()
+	{
+		//affiche les commentaires
+		$commentaire = new Commentaires;
+		$lesCommentaires = $commentaire->fetchAll();
+			
+		foreach($lesCommentaires as $unCommentaire)
+		{
+			$affichage = $unCommentaire->id;
+		}
+			
+		$this->view->lesCommentaires=$lesCommentaires;
+			
 	}
 	
 	public function ajoutAction()
@@ -57,21 +72,16 @@ class CommentairesController extends Zend_Controller_Action
 		$NewCommentaire->setAttrib('id', 'formcommentaire');
 		$NewCommentaire ->setRequired(TRUE);
 						
-		$NewTitre= new Zend_Form_Element_Text('NewTitre');
-		$NewTitre ->setLabel('Taper votre titre');
-		$NewTitre->setAttrib('id', 'formcommentaire');
-		$NewTitre ->setRequired(TRUE);
+				
+		$boutonSubmit = new Zend_Form_Element_Submit('Envoyer');			
 		
-		$boutonSubmit = new Zend_Form_Element_Submit('Envoyer');
-		$boutonReset = new Zend_Form_Element_Reset('Reset');
-			
-		$FormAjoutCommentaire->addElement($NewTitre);
 		$FormAjoutCommentaire->addElement($NewCommentaire);
+		$FormAjoutCommentaire->addElement($boutonSubmit);
 		
 		//affiche le formulaire
 		echo $FormAjoutCommentaire;
  
-	}
+	}	
 	
 	public function supprimerAction()
 	{

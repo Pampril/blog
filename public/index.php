@@ -30,7 +30,7 @@ $application = new Zend_Application(APPLICATION_ENV, APPLICATION_PATH . '/config
 set_include_path(implode(PATH_SEPARATOR, array(realpath(APPLICATION_PATH), get_include_path())));
 
 require_once 'models/class_articles.php';
-//require_once 'models/class_commentaire.php';
+require_once 'models/class_commentaire.php';
 //require_once 'models/class_images.php';
 //require_once 'models/class_user.php';
 
