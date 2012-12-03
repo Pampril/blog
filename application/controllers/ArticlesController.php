@@ -74,8 +74,8 @@ class ArticlesController extends Zend_Controller_Action
     	$FormAjoutArticle->addElement($NewArticle);
     	$FormAjoutArticle->addElement($boutonSubmit);    
     	
-    	//affiche le formulaire
-    	echo $FormAjoutArticle;
+    	//Envoi du formulaire à la vue
+		$this->view->FormAjoutArticle = $FormAjoutArticle;
     }
     
     public function afficherAction()
@@ -90,8 +90,8 @@ class ArticlesController extends Zend_Controller_Action
     	}
     	
     	$this->view->lesArticles=$lesArticles;    	
-    	$this->_helper->actionStack('afficher','commentaires','default',array());
-    	$this->_helper->actionStack('ajout','commentaires','default',array());    	
+    	$this->_helper->actionStack('ajout','commentaires','default',array());
+    	$this->_helper->actionStack('afficher','commentaires','default',array());    	  	
     }
     
     public function supprimerAction()

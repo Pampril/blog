@@ -18,8 +18,27 @@ a:hover, a:focus
 
 .article
 {	
-	width:500px;
-	height:500px;
+	width:500px;	
+	margin-left:500px;
+}
+
+.commentaire
+{	
+	background-color: grey;	
+	width:500px;	
+	margin-left:500px;
+	color:black;
+	border-style: solid;
+}
+.FormulaireCom
+{
+	width:500px;	
+	margin-left:500px;
+}
+
+.FormulaireArt
+{
+	width:500px;	
 	margin-left:500px;
 }
 

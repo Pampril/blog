@@ -65,11 +65,14 @@ class CommentairesController extends Zend_Controller_Action
 		// Parametrer le formulaire
 		$FormAjoutCommentaire->setMethod('post')->setAction('/commentaires/index');
 		$FormAjoutCommentaire->setAttrib('id', 'FormAjoutCommentaire');
-			
+		
+		
 		// Creer de l'elements de formulaire
 		$NewCommentaire= new Zend_Form_Element_Textarea('NewCom');
 		$NewCommentaire ->setLabel('Taper votre commentaire');
 		$NewCommentaire->setAttrib('id', 'formcommentaire');
+		$NewCommentaire->setAttrib('COLS', '50');
+		$NewCommentaire->setAttrib('ROWS', '10');
 		$NewCommentaire ->setRequired(TRUE);
 						
 				
@@ -78,8 +81,8 @@ class CommentairesController extends Zend_Controller_Action
 		$FormAjoutCommentaire->addElement($NewCommentaire);
 		$FormAjoutCommentaire->addElement($boutonSubmit);
 		
-		//affiche le formulaire
-		echo $FormAjoutCommentaire;
+		//Envoi du formulaire à la vue
+		$this->view->FormAjoutCommentaire = $FormAjoutCommentaire;
  
 	}	
 	
