@@ -3,7 +3,12 @@
 class ArticlesController extends Zend_Controller_Action
 {
 
-    public function indexAction()
+    public function init()
+    {     
+    				
+    }
+	
+	public function indexAction()
     {
     	$valeur = $this->_getParam('valeur');
     	
@@ -58,7 +63,7 @@ class ArticlesController extends Zend_Controller_Action
     		$addcommentaire->id= '';
     		$addcommentaire->date = date('Y-m-d');
     		$addcommentaire->commentaire = $_POST['NewCom'];
-    		$addcommentaire->idArticle = '3';
+    		$addcommentaire->idArticle = '7';
     	
     	
     		if(!empty($addcommentaire->commentaire))
@@ -94,7 +99,7 @@ class ArticlesController extends Zend_Controller_Action
     	$NewTitre->setAttrib('id', 'formarticle');
     	$NewTitre ->setRequired(TRUE);
     	
-    	$boutonSubmit = new Zend_Form_Element_Submit('Envoyer');   
+    	$boutonSubmit = new Zend_Form_Element_Submit('EnvoyerArt');   
     		
     	$FormAjoutArticle->addElement($NewTitre);
     	$FormAjoutArticle->addElement($NewArticle);
@@ -105,31 +110,37 @@ class ArticlesController extends Zend_Controller_Action
     }
     
     public function afficherunarticleAction()
-    {
-    	//affiche les articles 
-    	$article = new Articles;
-    	$lesArticles = $article->selectMax();
-    	
-    	$compteur=0;
-    	foreach($lesArticles as $unArticle)
-    	{
-    		$compteur=$compteur+1;
-    		$affichage[$compteur][0] = $unArticle->date; 
-    		$affichage[$compteur][1] = $unArticle->titre;
-    		$affichage[$compteur][2] = $unArticle->corps;
-    	}
-    	
-    	$this->view->compteur = $compteur;
-    	
-    	if(isset($affichage))
-		{
-			$this->view->affichage = $affichage;
-		}
-		else
-		{
-			echo 'Il n\'y a pas d\'article';
-		}   	
-    	   	  	
+    {   
+    	// Selectionne le dernier article	
+    	$sql = 'select id, titre, corps
+    			from articles 
+    			WHERE id IN
+    			(SELECT max(id) FROM articles)
+    			GROUP BY titre';
+    	$db = Zend_Db_Table::getDefaultAdapter();
+    	$datas = $db->query($sql)->fetchAll();
+	    foreach ($datas as $data ){
+    	    	$listeArticle[1][0] = $data['titre'];
+    	    	$listeArticle[1][1] = $data['corps'];
+    	    	$listeArticle[1][3] = $data['id'];
+    	    	
+	    }
+	    $this->view->listeArticle = $listeArticle;
+	    
+	    //Recupere les commentaires de l'article
+	    $sql2 = '
+	    			select idArticle, commentaire, date
+    				from commentaires
+    				WHERE idArticle  = \''.$listeArticle[1][3].'\'';
+	    
+	    $datas2 = $db->query($sql2)->fetchAll();
+	    $compteur2 =0;
+ 	    foreach ($datas2 as $data2 ){
+	    	$compteur2 = $compteur2 + 1;
+	    	$listeCom[$compteur2][0] = $data2['date'];
+	    	$listeCom[$compteur2][1] = $data2['commentaire'];
+ 	    	$this->view->listeCom = $listeCom;
+ 	    }
     }
     
     public function afficherlesarticlesAction()
@@ -150,6 +161,7 @@ class ArticlesController extends Zend_Controller_Action
     	$lesCommentaires = $commentaire->fetchAll();
     
     	$this->view->lesCommentaires=$lesCommentaires;
+
     		
     }
     

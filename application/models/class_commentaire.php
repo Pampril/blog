@@ -9,5 +9,7 @@ class Commentaires extends Zend_Db_Table_Abstract
 			'idArticle' => array(
 					'columns' => 'id',
 					'refTableClass' =>'articles'));
+	
+	
 }
 ?>
