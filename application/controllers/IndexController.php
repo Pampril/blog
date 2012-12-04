@@ -7,6 +7,7 @@ class IndexController extends Zend_Controller_Action
     {
     	$this->_helper->actionStack('menu', 'index', 'default', array());
     	$this->_helper->actionStack('login', 'index', 'default', array());    	
+    	$this->_helper->actionStack('afficherunarticle','articles','default',array());
     }
     
     public function menuAction()

@@ -20,8 +20,6 @@ require_once 'Zend/Session.php';
 Zend_Session::start();
 
 
-
-
 //on créee l'application, on lance le bootstrap et l'application
 $application = new Zend_Application(APPLICATION_ENV, APPLICATION_PATH . '/configs/application.ini');
 
