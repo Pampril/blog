@@ -1,0 +1,13 @@
+<div class = "commentaire">
+	<h2><U>Commentaire(s)</U></h2>
+	<?php 
+			$lesCommentaires = $this->lesCommentaires; 
+		  	foreach($lesCommentaires as $unCommentaire) 
+		  	{ ?>
+		  		<?php echo $unCommentaire->date; ?><br/><br/>		
+		  		<?php echo $unCommentaire->commentaire; ?><br/>	<br/>					
+						___________________<br/>			   
+	  <?php } ?>
+	  
+</div>
+

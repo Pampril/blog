@@ -1,0 +1,13 @@
+<div class = "article">
+	<h2><U>Article(s)</U></h2>
+	<?php 
+			$lesArticles = $this->lesArticles; 
+		  	foreach($lesArticles as $unArticle) 
+		  	{ ?>
+		  		<?php echo $unArticle->date; ?><br/><br/>
+		  		<?php echo $unArticle->titre; ?><br/><br/>		
+		  		<?php echo $unArticle->corps; ?><br/>	<br/>					
+						___________________<br/>			   
+	  <?php } ?>
+	  
+</div>
