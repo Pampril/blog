@@ -8,6 +8,17 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		parent::run();
 	}
 	
+	protected function _initView() 
+	{
+		$view = new Zend_View();
+		//... code de paramétrage de votre vue : titre, doctype ...
+		$view->addHelperPath('ZendX/JQuery/View/Helper', 'ZendX_JQuery_View_Helper');
+		//... paramètres optionnels pour les helpeurs jQuery ....
+		$viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper('ViewRenderer');
+		$viewRenderer->setView($view);
+		return $view;
+	}
+	
 	protected function _initDoctype() {
 		$this->bootstrap('view');
 		$view = $this->getResource('view');
@@ -20,7 +31,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	
 	protected function _initConfig()
 	{
-		Zend_Registry::set('configs', new Zend_Config($this->getOptions()));
+		Zend_Registry::set('configs', new Zend_Config($this->getOptions()));		
 	}
 	
 	protected function _initSession()

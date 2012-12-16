@@ -15,6 +15,9 @@ set_include_path(implode(PATH_SEPARATOR, array(realpath(LIBRARY_PATH), get_inclu
 // on a besoin de zend app pour lancer l'application
 require_once 'Zend/Application.php';
 
+require_once "Zend/Loader.php";
+Zend_Loader::registerAutoload();
+
 //on lance la session
 require_once 'Zend/Session.php';
 Zend_Session::start();
@@ -27,8 +30,11 @@ $application = new Zend_Application(APPLICATION_ENV, APPLICATION_PATH . '/config
 //on modifie l'include path de php
 set_include_path(implode(PATH_SEPARATOR, array(realpath(APPLICATION_PATH), get_include_path())));
 
-require_once 'models/class_articles.php';
-require_once 'models/class_commentaire.php';
+//permet l'upload d'images
+defined('PUBLIC_PATH')|| define('PUBLIC_PATH', realpath(dirname(__FILE__)));
+
+//require_once 'models/class_articles.php';
+//require_once 'models/class_commentaire.php';
 //require_once 'models/class_images.php';
 //require_once 'models/class_user.php';
 
