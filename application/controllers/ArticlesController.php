@@ -2,12 +2,6 @@
 
 class ArticlesController extends Zend_Controller_Action
 {
-
-    public function init()
-    {     
-    				
-    }
-	
 	public function indexAction()
     {
     	$valeur = $this->_getParam('valeur');
@@ -28,7 +22,7 @@ class ArticlesController extends Zend_Controller_Action
     			case "affichercommentaire":
     				$this->_helper->actionStack('affichercommentaire', 'articles', 'default', array());
     				break;
-    		}
+    		}    		
     	}
     	
     	//Envoi les données de l'article à la base de donnée
@@ -57,7 +51,7 @@ class ArticlesController extends Zend_Controller_Action
     	//Envoi des commentaires à la base de donnée
     	if(isset($_POST['EnvoyerCom']))
     	{
-    		$commentaire = new Commentaires;
+    		$commentaire = new Commentaire;
     	
     		$addcommentaire = $commentaire->createRow();
     		$addcommentaire->id= '';
@@ -119,7 +113,8 @@ class ArticlesController extends Zend_Controller_Action
     			GROUP BY titre';
     	$db = Zend_Db_Table::getDefaultAdapter();
     	$datas = $db->query($sql)->fetchAll();
-	    foreach ($datas as $data ){
+	    foreach ($datas as $data )
+	    {
     	    	$listeArticle[1][0] = $data['titre'];
     	    	$listeArticle[1][1] = $data['corps'];
     	    	$listeArticle[1][3] = $data['id'];
@@ -135,7 +130,8 @@ class ArticlesController extends Zend_Controller_Action
 	    
 	    $datas2 = $db->query($sql2)->fetchAll();
 	    $compteur2 =0;
- 	    foreach ($datas2 as $data2 ){
+ 	    foreach ($datas2 as $data2 )
+ 	    {
 	    	$compteur2 = $compteur2 + 1;
 	    	$listeCom[$compteur2][0] = $data2['date'];
 	    	$listeCom[$compteur2][1] = $data2['commentaire'];
@@ -157,7 +153,7 @@ class ArticlesController extends Zend_Controller_Action
     public function affichercommentaireAction()
     {
     	//affiche les commentaires
-    	$commentaire = new Commentaires;
+    	$commentaire = new Commentaire;
     	$lesCommentaires = $commentaire->fetchAll();
     
     	$this->view->lesCommentaires=$lesCommentaires;
