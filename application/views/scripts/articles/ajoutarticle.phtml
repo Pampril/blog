@@ -1,6 +1,14 @@
 <div class= "FormulaireArt">
-	<?php
-				
-		echo $this->FormAjoutArticle; 
-	?>
+<?php
+
+	if($this->Done != true)
+	{	
+		echo $this->form_ajout_article;
+	}
+	if($this->Done == true)
+	{
+		echo 'Article enregistré'; 	
+	}
+
+?>
 </div>

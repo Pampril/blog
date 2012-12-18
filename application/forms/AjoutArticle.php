@@ -1,35 +1,73 @@
 <?php
-class Application_Form_AjoutArticle extends Zend_Form
+
+class AjoutArticle extends Zend_Form
 {
+
 	public function init()
 	{
-		// Créer un objet formulaire
-		$FormAjoutArticle = new Zend_Form();
-		 
-		// Parametrer le formulaire
-		$this->setMethod('post')->setAction('/articles/index');
-		$this->setAttrib('id', 'FormAjoutArticle');
+		// Décorateur pour les inputs de login et mdp
+		$decorators_input = array(
+				array('ViewHelper'),
+				array('Errors'),
+				array('Label'),
+				array('HtmlTag')
+		);
+
+		// Décorateur pour le formulaire en général
+		$decorators_form = array(
+				'FormElements',
+				'Form'
+		);
+
+		//Paramétre le formulaire
+		$this->setMethod('post');
+		//$this->setAction(Zend_Registry::get('baseUrl'));
+		$this->setAttrib('id', 'form_ajout_article');
+		$this->addDecorators($decorators_form);
 		
-		// Creer de l'elements de formulaire
-		$NewArticle= new Zend_Form_Element_Textarea('NewArticle');
-		$NewArticle ->setLabel('Taper votre article');
-		$NewArticle->setAttrib('id', 'formarticle');
-		$NewArticle ->setRequired(TRUE);
-		 
-		$NewTitre= new Zend_Form_Element_Text('NewTitre');
-		$NewTitre ->setLabel('Taper votre titre');
-		$NewTitre->setAttrib('id', 'formarticle');
-		$NewTitre ->setRequired(TRUE);
-		 
-		$boutonSubmit = new Zend_Form_Element_Submit('EnvoyerArt');
+		//Champ de la date de l'article
+		$Date = new Zend_Form_Element_Text('date');
+		$Date->setLabel("Date :");
+		$DateJour = new Zend_Date();
+		$Date->setValue (date("Y-m-d"));
+		$Date->setRequired(true);
 		
-		$this->addElement($NewTitre);
-		$this->addElement($NewArticle);
-		$this->addElement($boutonSubmit);
-		 
-		//Envoi du formulaire à la vue
-		$this->view->FormAjoutArticle = $FormAjoutArticle;
+		//Champ du titre de l'Article
+		$Titre = new Zend_Form_Element_Text('titre');
+		$Titre->setLabel('Titre :');
+		$Titre->setValue("Ceci est le Titre");
+		$Titre->setRequired(true);		
+
+		//Champ du corps
+		$Corps = new Zend_Form_Element_Textarea('corps');
+		$Corps->setLabel("Article :");
+		$Corps->setValue("Ceci est le Corps");
+		$Corps->setRequired(true);
+		
+		
+			
+		//Champ pour le choix de publication ou non
+		$Publier = new Zend_Form_Element_Checkbox(array(
+			'name'		=> 'publication',
+			'value'		=> 0,
+			'checked'	=> false,
+			'label'		=> 'Publication :'));
+
+		$Publier->setRequired(true);
+		$Publier->setDecorators($decorators_input);	
+
+		//Instancie un element type submit
+		$Submit = new Zend_Form_Element_Submit('Enregistrer');
+
+		//Ajout des élément dans le formulaire
+		$this->addElement($Date);
+		$this->addElement($Titre);
+		$this->addElement($Corps);
+		$this->addElement($Publier);
+		$this->addElement($Submit);
+			
+		//Instancie class article
+		$ligneInstance = new Articles;
+		
 	}
-	
-	
-} 
+}

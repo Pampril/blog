@@ -1,0 +1,8 @@
+<?php if($this->need_connexion){
+	echo "Une connexion est nécessaire pour accéder à la page désirée.<br/><br/>";
+}
+echo $this->form_connexion;
+if($this->error_connexion){
+	echo "Erreur lors de la connexion";
+}
+?>
