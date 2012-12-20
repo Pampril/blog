@@ -127,7 +127,43 @@ class ArticlesController extends Zend_Controller_Action
     //Suppression d'un article   
     public function supprimerarticleAction()
     {
-    	//supprime un article
+    	//Instancie le form créer
+		$formSupprimerArticle = new SupprimerArticle;
+		//Instancie le form créer
+		$article = new Article;
+		
+		//affiche les articles
+		$lesArticles = $article->fetchAll();
+		
+		$this->view->lesArticles=$lesArticles;
+		$this->form->lesArticles=$lesArticles;
+		
+		if(!$this->getRequest()->getPost())
+		{
+			//Envoie a la vue le form
+			$this->view->assign('form_supprimer_article',$formSupprimerArticle);
+		}
+		if(isset($_POST['boutonSubmitSupprimerVol']))
+		{
+			//supprimer un vol
+			foreach($lesArticles as $unArticle)
+			{
+				if(isset($_POST[$unArticle->idArticle]))
+				{
+					if($_POST[$unArticle->idArticle] == 1)
+					{
+						$Article->find($unArticle->idArticle)->current()->delete();
+						$tableau[] = $unArticle->idArticle;
+					}
+				}
+			}
+
+			if(isset($tableau))
+			{
+				$this->view->tableau = $tableau;
+			}
+		}
+		
     }
     //Modification d'un article
     public function modifierarticleAction()

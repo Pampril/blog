@@ -1,9 +1,8 @@
 <?php
 
 
-class Application_Form_SupprimerArticle extends Zend_Form
+class SupprimerArticle extends Zend_Form
 {
-
 	public function init()
 	{
 
@@ -26,20 +25,13 @@ class Application_Form_SupprimerArticle extends Zend_Form
 						array('tr' => 'HtmlTag'),
 						array('tag'=> 'tr'),
 				)
-		);
-		//decorateur du bouton formulaire complet
-		$decorateurTableau = array(
-				array('FormElements'),
-				array('HtmlTag', array('tag'=>'table', 'id'=>'tableauCaseACocherVol'))
-		);
-		
+		);		
 				
 		//Paramétre le formulaire
 		$this->setMethod('post');
-		$this->setAction(Zend_Registry::get('baseUrl'));
+		//$this->setAction(Zend_Registry::get('baseUrl'));
 		$this->setAttrib('id', 'form_supprimer_article');
-		//$this->addDecorators($decorators_form);
-		
+		//$this->addDecorators($decorators_form);		
 		
 		$lesArticles = $this->lesArticles;
 		
@@ -70,11 +62,7 @@ class Application_Form_SupprimerArticle extends Zend_Form
 			$corps[$unArticle->corps] = $larticle['corps'];
 			//la publication (oui/non)
 			$larticle = $lesArticles->getRecuperPublication($unArticle->publication);
-			$publication[$unArticle->publication] = $larticle['publication'];
-			//l'id de l'utilisateur qui a créé l'article
-			$larticle = $lesArticles->getRecuperIdUtilisateur($unArticle->Utilisateur_idUtilisateur);
-			$idUtilisateur[$unArticle->Utilisateur_idUtilisateur] = $larticle['Utilisateur_idUtilisateur'];
-			//l'id de l'image sur l'article
+			$publication[$unArticle->publication] = $larticle['publication'];			
 			$larticle = $lesArticles->getRecuperIdImage($unArticle->Image_idImage);
 			$idImage[$unArticle->Image_idImage] = $larticle['Image_idImage'];
 		
@@ -93,15 +81,14 @@ class Application_Form_SupprimerArticle extends Zend_Form
 		$this->view->lesTitreArticles = $titreArticle;
 		$this->view->lesDateArticle = $dateArticle;
 		$this->view->lesCorps = $corps;
-		$this->view->lesPublications = $publication;
-		$this->view->lesIdUtilisateur = $idUtilisateur;
+		$this->view->lesPublications = $publication;		
 		$this->view->lesIdImage = $idImage;
 
 
 		$this->addElement($btSubmit);
 			
 		//Instancie class article
-		$ligneInstance = new Application_Model_MArticle();
+		$ligneInstance = new Article();
 
 
 	}
