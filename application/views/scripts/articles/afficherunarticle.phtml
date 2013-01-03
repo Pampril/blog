@@ -1,23 +1,33 @@
 <div class = "article">
-<?php 
-$affichage = $this->affichage;
-$compteur = $this->compteur;
-$listeArticle = $this->listeArticle;
-$listeCom = $this->listeCom;
-$count = count($listeCom);
-?>
-
-<table border="1">
-	<tr>
-		<td><?php echo $listeArticle[1][0];?></td>
-	</tr>
-	<tr>
-		<td><?php echo $listeArticle[1][1];?></td>
-	</tr>
-</table>
-</div>
+	<?php 
+		$affichage = $this->affichage;
+		$compteur = $this->compteur;
+		$listeArticle = $this->listeArticle;
+		$listeCom = $this->listeCom;
+		$count = count($listeCom);
+		
+		if(isset($listeArticle))
+		{
+	?>
+	
+	<table border="1">
+		<tr>
+			<td><?php echo $listeArticle[1][2];?></td>
+		</tr>
+		<tr>		
+			<td><?php echo $listeArticle[1][0];?></td>		
+		</tr>
+		<tr>
+			<td><?php echo $listeArticle[1][1];?></td>
+		</tr>
+	</table>
 <br/><br/><br/>
-
+		<?php }
+			  else 
+			  {
+			  	echo 'Aucun article publié';
+			  }		?>
+</div>
 <div class = "commentaire">
 <h><U>Commentaire(s)</U></h><br/><br/>
 	<?php 

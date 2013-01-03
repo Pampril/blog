@@ -39,27 +39,29 @@ class CommentaireController extends Zend_Controller_Action
 
 		$class_commentaire= new Commentaire;
 		
-		//$idArticle = $this->_getParam('idArticle');
+		$idArticle = $this->_getParam('idArticle');
+		
 		
 		
 		// Selectionne le dernier article qui peut etre publié
-// 		$sql = 'select idArticle
-// 		from Article
-// 		WHERE idArticle IN (select idArticle
-// 		from Article
-// 		where idArticle IN (select MAX( idArticle )
-// 		from Article
-// 		WHERE `publication` != 0))
-// 		GROUP BY `idArticle`;';
+		$sql = 'select id
+		from articles
+		WHERE id IN (select id
+		from articles
+		where id IN (select MAX( id )
+		from articles
+		WHERE publication != 0))
+		GROUP BY `id`;';
 		
-// 		if ($idArticle == "")
-// 		{			
-// 			$db = Zend_Db_Table::getDefaultAdapter();
-// 			$datas = $db->query($sql)->fetchAll();
-// 			foreach ($datas as $data ){
-// 				$idArticle = $data['idArticle'];
-// 			}
-// 		}
+		if ($idArticle == "")
+		{			
+			$db = Zend_Db_Table::getDefaultAdapter();
+			$datas = $db->query($sql)->fetchAll();
+			foreach ($datas as $data ){
+				$idArticle = $data['id'];
+			}
+		}
+		echo "id de l'article :".$idArticle;
 		
 		if(!$this->getRequest()->getPost())
 		{
@@ -69,37 +71,37 @@ class CommentaireController extends Zend_Controller_Action
 		else
 		{
 			// on récupère les données du formulaire
-			$data = $this->getRequest()->getPost();
-			
-			//$data["Article_idArticle"] = $idArticle;
-			
-			
+			$data = $this->getRequest()->getPost();		
+			$data["idArticle"] = $idArticle;
 			//Verif des donnée du formulaire
 			if($formAjoutCommentaire->isValid($data)==true)
 			{
 				// on récupère les infos du formulaire
-				if(isset($data['pseudo'])
-						&& isset($data['dateCommentaire'])
-						&& isset($data['commentaire']))
-						//&& isset($data["Article_idArticle"]))  
+				if(isset($data['auteur'])
+						&& isset($data['date'])
+						&& isset($data['commentaire'])
+						&& isset($data["idArticle"])) 
+					 
 				{
-					$pseudo= $data['pseudo'];
-					$dateCommentaire= $data['dateCommentaire'];
+					$auteur= $data['auteur'];
+					$dateCommentaire= $data['date'];
 					$commentaire = $data['commentaire'];
-					//$idArticle = $data["Article_idArticle"];
+					$idArticle = $data["idArticle"];
+					
 				}
 				else
 				{
-					$pseudo= "";
+					$auteur= "";
 					$dateCommentaire= "";
 					$commentaire = "";
-					//$idArticle = "";
+					$idArticle = "";
+					//echo $idArticle;
 				}
-				if($pseudo!= "" 
+				if($auteur!= "" 
 					&& $dateCommentaire!= ""
-					&& $commentaire != "")
-					//&& $idArticle != "")
-				{						
+					&& $commentaire != ""
+					&& $idArticle != "")
+				{	//echo'test3';					
 					//AJOUT DANS LA BD
 					$ajoutCommentaire= $class_commentaire->createRow($data);
 					$ajoutCommentaire->save();

@@ -8,6 +8,8 @@ defined('LIBRARY_PATH') || define('LIBRARY_PATH',
 defined('APPLICATION_ENV') || define('APPLICATION_ENV',
 		(getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
 
+//permet l'upload d'images
+defined('PUBLIC_PATH')|| define('PUBLIC_PATH', realpath(dirname(__FILE__)));
 
 //on modifie l'include path de php
 set_include_path(implode(PATH_SEPARATOR, array(realpath(LIBRARY_PATH), get_include_path())));
@@ -28,8 +30,7 @@ $application = new Zend_Application(APPLICATION_ENV, APPLICATION_PATH . '/config
 //on modifie l'include path de php
 set_include_path(implode(PATH_SEPARATOR, array(realpath(APPLICATION_PATH), get_include_path())));
 
-//permet l'upload d'images
-defined('PUBLIC_PATH')|| define('PUBLIC_PATH', realpath(dirname(__FILE__)));
+
 
 $application->bootstrap()->run();
 ?>

@@ -4,7 +4,7 @@ body
 {
 	color: #F0E39E;
 	background: #2C2F22;
-	width:980px;	
+	width:980px;
 }
 
 a 
@@ -22,6 +22,18 @@ a:hover, a:focus
 	margin-left:500px;
 }
 
+.listearticle
+{
+   float:right;
+   background : grey;
+   border-radius : 10px;
+   padding : 10px;
+   margin-right:-400px;   
+   width:200px;
+   max-height: 350px;
+   overflow:auto;
+}
+
 .commentaire
 {	
 	background-color: grey;	
@@ -29,6 +41,8 @@ a:hover, a:focus
 	margin-left:500px;
 	color:black;
 	border-style: solid;
+	max-height: 250px;
+    overflow:auto;
 }
 .FormulaireCom
 {

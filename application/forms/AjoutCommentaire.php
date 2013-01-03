@@ -33,7 +33,7 @@ class AjoutCommentaire extends Zend_Form
 
 
 		//Champ de la date du commentaire
-		$Date = new Zend_Form_Element_Text('dateCommentaire');
+		$Date = new Zend_Form_Element_Text('date');
 		$Date->setLabel("Date / heure :");
 		$DateJour = new Zend_Date();
 		$Date->setValue(date("Y-m-d H:m:s"));
@@ -51,7 +51,7 @@ class AjoutCommentaire extends Zend_Form
 		$btSubmit = new Zend_Form_Element_Submit('Ajouter');
 
 		//Ajout des élément dans le formulaire
-		//$Auteur->addElement($Auteur);
+		$this->addElement($Auteur);
 		$this->addElement($Date);
 		$this->addElement($Commentaire);
 		$this->addElement($btSubmit);

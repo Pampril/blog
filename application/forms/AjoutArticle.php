@@ -29,7 +29,7 @@ class AjoutArticle extends Zend_Form
 		$Date = new Zend_Form_Element_Text('date');
 		$Date->setLabel("Date :");
 		$DateJour = new Zend_Date();
-		$Date->setValue (date("Y-m-d"));
+		$Date->setValue (date("Y-m-d H:m:s"));
 		$Date->setRequired(true);
 		
 		//Champ du titre de l'Article

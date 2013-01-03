@@ -1,0 +1,57 @@
+<div class = "article">
+<?php
+	$affichage = $this->affichage;
+	$compteur = $this->compteur;
+	$listeArticle = $this->listeArticle;
+	$listeCom = $this->listeCom;
+	$count = count($listeCom);
+?>
+
+<table border="1">
+<tr>
+<?php echo $listeArticle[1][0]; ?>
+<br > 
+<?php echo	$listeArticle[1][2]; ?>
+<br ><br >
+</tr>
+<tr>
+<?php echo $listeArticle[1][1];?>
+</tr>
+</table>
+</div>
+<br/>
+
+<div class = "commentaire">
+<table border="1">
+<?php
+
+for ($i = 1; $i <= $count; $i++) {
+?>
+<tr>
+<td>
+
+<?php echo $listeCom[$i][0];?>
+ <br />
+
+<?php echo $listeCom[$i][2]; ?> <br /><br />
+<?php echo	$listeCom[$i][1]; ?> 
+</td>
+
+</tr>
+
+<?php
+}
+
+
+?>
+
+</table>
+</div>
+ <br />
+ <div class = "FormulaireCom">
+	<?php 
+		echo $this->action('ajoutcommentaire', 'commentaire');
+	?>
+
+<br/>
+</div>

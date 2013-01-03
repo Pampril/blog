@@ -1,14 +1,29 @@
-<div class = "article">
+<div class = "listearticle">
 	<h2><U>Article(s)</U></h2>
 	
 	<?php 
 			$lesArticles = $this->lesArticles; 
 		  	foreach($lesArticles as $unArticle) 
 		  	{ ?>
-		  		<?php echo $unArticle->date; ?><br/><br/>
-		  		<p id="edit" contenteditable="true">
-			  		<?php echo $unArticle->titre; ?><br/><br/>		
-			  		<?php echo $unArticle->corps; ?><br/>	<br/>					
+		  		<a 
+		  			href="<?php echo $this->baseUrl('articles/afficherlarticle')."?idArticle=$unArticle->id" ?>">
+					<?php echo $unArticle->date; ?><br/><br/>
+				</a>				
+				<?php echo $unArticle->titre;?><br/>
+				<?php 
+		  		 //on récupére l'instance de zend_auth
+    			 $auth = Zend_Auth::getInstance();
+			  	if ($auth->hasIdentity()){?>
+			  	<a 
+		  			href="<?php echo $this->baseUrl('articles/supprimerarticle')."?idArticle=$unArticle->id" ?>">
+					Supprimmer<br/><br/>
+				</a>
+				<a 
+		  			href="<?php echo $this->baseUrl('articles/modifierarticle')."?idArticle=$unArticle->id" ?>">
+					Modifier<br/><br/>
+				</a>
+				
+				<?php }?> 				
 						___________________<br/>
 				</p>		   
 	  <?php } ?>

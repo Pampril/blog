@@ -12,129 +12,82 @@ class IndexController extends Zend_Controller_Action
     {
     	$this->_helper->actionStack('menu', 'index', 'default', array());    	    	
     	$this->_helper->actionStack('afficherunarticle','articles','default',array());
+    	$this->_helper->actionStack('afficherlesarticles', 'articles');
     }
     
     public function menuAction()
     {
     	$this->_helper->viewRenderer->setResponseSegment('menu');
     }
-    
-    public function connexionAction()
-    {
-    	// Instanciation de Zend_Auth
-		$auth = Zend_Auth::getInstance();
-	
-		// On récupère les données de GET
-		$data_get = $this->getRequest()->getQuery();
-	
-		// url pour l'action du formulaire
-		$url = $this->view->baseUrl('index/connexion');
-	
-		if(isset($data_get['need_action']) && isset($data_get['need_controller']))
+		
+	public function loginAction()
+	{
+		$this->_helper->viewRenderer->setResponseSegment('login');
+		if ($this->_request->isPost())
 		{
-			$url .= "?need_action=".$data_get['need_action']."&need_controller=".$data_get['need_controller']."&need_connexion=1";
-		}
-	
-		// instance du formulaire de connexion
-		$form_connexion = new Connexion(array('url'=>$url));
-
-		// Si on vient d'une redirection
-		if(isset($data_get['need_connexion']))
-		{
-			$this->view->assign('need_connexion', true);
-		}
-						
-		// Si on est déjà connecté, on est directement réenvoyé sur une page d'accueil
-		if($auth->hasIdentity())
-		{
-			$this->_helper->getHelper('Redirector')->gotoSimple('index', 'index');
-		}
-				
-		// affichage du formulaire lors de la première visite
-		if(!$this->getRequest()->getPost())
-		{
-			$this->view->assign('form_connexion',$form_connexion);
-		}
-		else
-		{
-			// on récupère les données du formulaire
-			$data = $this->getRequest()->getPost();
-
-			// on récupère login et mot de passe pour tester la connexion
-			if(isset($data['login']) && isset($data['mdp']))
-			{
-				$identifiant = trim((string)$data['login']);
-				$mdp = trim((string)$data['mdp']);
-			}
-			else
-			{
-				$identifiant = "";
-				$mdp = "";
-			}
-
-			// variable de test renseignant si la connexion à échouée ou non
-			$test_connexion = false;
-
-			// variable signalant si on doit afficher message erreur ou pas
-			$error_connexion = false;
-
-			// on effectue la connexion
-			if($identifiant!="" && $mdp!="")
-			{
-				// Parametrage de l'adapteur
-				$dbAdapter = new Zend_Auth_Adapter_DbTable(null, 'Utilisateur', 'login', 'mdp' );
+			try {
+				$db =Zend_Registry::get('db');
+				//credits de l'utilisateur $_post normalement
+				// on récupère les données du formulaire de connexion
+				//et on applique un filtre dessus qui enleve toutes balises
+				//php ou html
+				$f = new Zend_Filter_StripTags();
+				$login = $f->filter($this->_request->getPost('login'));
+				$password = $f->filter($this->_request->getPost('mdp'));
 					
-				// Chargement identifiant et mdp a tester
-				$dbAdapter->setIdentity($identifiant);
-				$dbAdapter->setCredential(md5($mdp));
+				//on instancie Zend_Auth
+				$auth = Zend_Auth::getInstance();
 					
-				// Récupère l'authentification en passant en parametre l'adaptateur
-				$resultat_connexion = $auth->authenticate($dbAdapter);
+				//charger et parametrer l'adapteur
+				//on peut passer un dernier parametre 'MD5(?)'
+				$dbAdapter = new Zend_Auth_Adapter_DbTable($db,'user','login','mdp');
 					
-				// Si la connexion est réussie
-				if($resultat_connexion->isValid())
+				//charger les logs à vérifier
+				$dbAdapter->setIdentity($login);
+				$dbAdapter->setCredential($password);
+					
+				//on test l'autentification
+				$resultat = $auth->authenticate($dbAdapter);
+					
+				if($resultat->isValid())
 				{
-					$test_connexion = true;
-
-					// Récupère l'id et login
-					$data = $dbAdapter->getResultRowObject(null, 'mdp');
-
-					// Stocke id et login dans zend_auth
-					$auth->getStorage()->write($data);
-
-					// Si l'utilisateur vient d'une autre page, on redirige une fois co a la page qu'il désirait
-					if(isset($data_get['need_action']) && isset($data_get['need_controller']))
-					{
-						$this->_helper->getHelper('Redirector')->gotoSimple($data_get['need_action'], $data_get['need_controller']);
-					}
-					else
-					{
-						// si non, on le redirige vers une page par défaut
-						$this->_helper->getHelper('Redirector')->gotoSimple('index', 'index');
-					}
+					$data = $dbAdapter->getResultRowObject(null,'mdp');
+					$auth->getStorage()->write($data);		
+					$this->_redirect('index/index');
 				}
 				else
 				{
-					$test_connexion = false;
+					$formConnexion = new Connexion();
+					$this->view->formconnexion = $formConnexion;
 				}
-			}	
-				// Si l'identifiant, mdp sont vides ou bien que la connexion a échoué, on réaffiche le formulaire pré-remplit
-				if($identifiant=="" || $mdp=="" || !$test_connexion)
-				{					
-					$error_connexion = true;
-					$form_connexion->populate($data);
-					$this->view->assign('form_connexion',$form_connexion);
-				}
-	
-				// permet d'afficher un message d'erreur
-				$this->view->assign('error_connexion', $error_connexion);
-			}				
+			}
+			catch(Zend_Exception $e)
+			{
+				echo $e->getMessage();
+			}
 		}
-        
-    public function ajaxAction()
-    {
-    	$this->view->msg = "bwa";
-    }
-        
+		else
+		{
+			$auth = Zend_Auth::getInstance();
+			//on regarde si on est bien authentifié
+			if ($auth->hasIdentity())
+			{//on affiche le login de celui qui est connecté
+				$identity = $auth->getIdentity();
+				$this->view->identity = $identity;
+			}
+			else
+			{
+				$formConnexion = new Connexion();
+				$this->view->formconnexion = $formConnexion;
+			}
+		}
+	}
+		
+	public function deconnexionAction()
+	{
+		// Supprime la connexion de l'utilisateur
+		Zend_Auth::getInstance()->clearIdentity();
+		// Redirige à la page de connexion
+		$this->_redirect('index/index');
+	}
 }
-

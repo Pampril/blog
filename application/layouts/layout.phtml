@@ -11,15 +11,26 @@
 
 <body>
 	
-	<div id="corps">			
-	
+	<div id="corps">
+		
 		<div id="entete">
 			<h1><a href="/">Blog</a></h1>		
 		</div>	
 		
+		<div id="content-block-connecte">
+			<?php 
+				echo $this->action('login', 'index');
+			?>
+		</div>
+		
+		<?php 
+		//on récupére l'instance de zend_auth
+    	$auth = Zend_Auth::getInstance();
+    	if ($auth->hasIdentity()){?>
 		<div class="menu">
 			<?php  echo $this->layout()->menu; ?>			
 		</div>	
+		<?php }?> 
 		
 		<div id="contenu">
 			<?php echo $this->layout()->content; ?>
@@ -32,7 +43,7 @@
 <footer>
 	<div id="pied">
 		<p id="copyright">Cyril DOYEN &copy; 2012</p>
-	</div>
+	</div>	
 </footer>
 
 </html>
