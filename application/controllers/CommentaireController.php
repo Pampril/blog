@@ -60,8 +60,7 @@ class CommentaireController extends Zend_Controller_Action
 			foreach ($datas as $data ){
 				$idArticle = $data['id'];
 			}
-		}
-		echo "id de l'article :".$idArticle;
+		}	
 		
 		if(!$this->getRequest()->getPost())
 		{
@@ -119,7 +118,96 @@ class CommentaireController extends Zend_Controller_Action
 		
 			}
 		}		
-	}	
+	}
+	
+	//affiche l'article selectionné dans la liste
+	public function afficherlecommentaireAction()
+	{
+		// Récupère l'IdArticle passé en parametre dans l'url
+		$idCommentaire = $this->_getParam('idCommentaire');
+	
+	
+		// Selectionne l'article qui a été cliqué
+		$sql = "select id, auteur, commentaire, date
+		from commentaires
+		WHERE id = $idCommentaire ;";
+	
+	
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$datas = $db->query($sql)->fetchAll();
+		 
+		foreach ($datas as $data )
+		{
+			$listeCommentaire[1][0] = $data['auteur'];
+			$listeCommentaire[1][1] = $data['date'];
+			$listeCommentaire[1][2] = $data['commentaire'];
+			$listeCommentaire[1][3] = $data['id'];
+	
+		}
+		$this->view->lesCommentaires = $listeCommentaire;		
+		
+	}
+
+	public function modifierlecommentaireAction()
+	{
+		if(isset($_GET['idCommentaire']))
+		{
+	
+			if($this->_request->isPost())
+			{
+				//on instancie le model commentaire
+				$class_commentaire = new Commentaire;
+				
+				$data=array('auteur'=>$this->_request->getPost('auteur'),
+						'date'=>$this->_request->getPost('date'),
+						'commentaire'=>$this->_request->getPost('commentaire'));						
+				 
+				$db = Zend_Db_Table::getDefaultAdapter();
+				$db->update('commentaires',$data,'id ='.$_GET['idCommentaire']);
+				$this->_redirect('/index/index');
+			}
+			else
+			{
+				// Selectionne le commentaire qui a été cliqué
+				$sql = 'select *
+    			from commentaires
+    			WHERE id = '.$_GET['idCommentaire'].' ;';
+				 
+				$db = Zend_Db_Table::getDefaultAdapter();
+				$datas = $db->query($sql)->fetch();
+	
+				//Instancie le formulaire créé
+				$form = new AjoutCommentaire;
+				$form->populate($datas);
+				echo $form;
+			}			
+		}
+	}
+	
+	//Suppression d'un commentaire
+	public function supprimercommentaireAction()
+	{
+		//on instancie le model commentaire
+    	$class_commentaire = new Commentaire();
+    	
+    	//récupére les commentaires
+    	$lesCommentaires = $class_commentaire->fetchAll();
+    	$idCommentaire = $this->_getParam('idCommentaire');
+    	
+    	$this->view->lesCommentaires=$lesCommentaires;    	
+    	
+    	//supprimer un article
+    	foreach($lesCommentaires as $unCommentaire)
+    	{    				
+    		if($idCommentaire ==$unCommentaire->id)
+    		{
+    			$class_commentaire->find($unCommentaire->id)->current()->delete();    			
+    			//renvoi sur l'index
+    			$this->_redirect('/index/index');
+    		} 			  
+    	}    	
+	}
+	
 }  
 	   
 

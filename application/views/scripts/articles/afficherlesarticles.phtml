@@ -1,31 +1,57 @@
-<div class = "listearticle">
-	<h2><U>Article(s)</U></h2>
-	
-	<?php 
-			$lesArticles = $this->lesArticles; 
-		  	foreach($lesArticles as $unArticle) 
-		  	{ ?>
+<?php 
+//on récupére l'instance de zend_auth
+$auth = Zend_Auth::getInstance();
+
+if ($auth->hasIdentity())
+{?>
+	<div class = "listegauche">
+<?php
+}
+else
+{?>
+	<div class = "listedroite">
+<?php 
+}?>
+
+<h2><U>Article(s)</U></h2>
+
+<?php 
+		$lesArticles = $this->lesArticles; 
+	  	foreach($lesArticles as $unArticle) 
+	  	{ 
+	  		if ($auth->hasIdentity())
+	  		{?>			  		
 		  		<a 
-		  			href="<?php echo $this->baseUrl('articles/afficherlarticle')."?idArticle=$unArticle->id" ?>">
-					<?php echo $unArticle->date; ?><br/><br/>
-				</a>				
-				<?php echo $unArticle->titre;?><br/>
-				<?php 
-		  		 //on récupére l'instance de zend_auth
-    			 $auth = Zend_Auth::getInstance();
-			  	if ($auth->hasIdentity()){?>
+		  			href="<?php echo $this->baseUrl('articles/afficherarticleselect')."?idArticle=$unArticle->id" ?>">
+					<?php echo $unArticle->date; ?><br/>
+				</a>
+						
+				<?php echo $unArticle->titre;?><br/>		
+		
 			  	<a 
 		  			href="<?php echo $this->baseUrl('articles/supprimerarticle')."?idArticle=$unArticle->id" ?>">
-					Supprimmer<br/><br/>
+					Supprimmer<br/>
 				</a>
 				<a 
 		  			href="<?php echo $this->baseUrl('articles/modifierarticle')."?idArticle=$unArticle->id" ?>">
-					Modifier<br/><br/>
-				</a>
-				
-				<?php }?> 				
-						___________________<br/>
-				</p>		   
-	  <?php } ?>
+					Modifier<br/>
+				</a>					
+		  						
+					___________________
+      <?php }
+      		else 
+			{
+				if($unArticle->publication == 1)
+				{?>
+				<a
+					href="<?php echo $this->baseUrl('articles/afficherarticleselect')."?idArticle=$unArticle->id" ?>">
+					<?php echo $unArticle->date; ?><br/>
+				</a>																
+				<?php echo $unArticle->titre;
+				}
+			}
+			?>
+	  								   
+  <?php } ?>
 	 
 </div>

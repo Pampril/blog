@@ -1,15 +1,17 @@
-<?php
-	$formconnexion = $this->formconnexion;
-	$identity = $this->identity;
-	if(isset($identity))
-	{
-		echo '	<div>
-					Vous êtes connectés en tant que '.$identity->login.'<br />
-					<a href="'.$this->baseUrl('index/deconnexion').'">Deconnexion</a>
-				</div>';
-	}
-	else
-	{
-		echo $formconnexion;
-	}
-?>
+<div id = "connexion">
+	<?php
+		$formconnexion = $this->formconnexion;
+		$identity = $this->identity;
+		if(isset($identity))
+		{
+			echo '	<div>
+						Vous êtes connectés en tant que '.$identity->login.'<br />
+						<a href="'.$this->baseUrl('index/deconnexion').'">Deconnexion</a>
+					</div>';
+		}
+		else
+		{
+			echo $formconnexion;
+		}
+	?>
+</div>

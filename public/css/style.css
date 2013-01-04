@@ -22,13 +22,25 @@ a:hover, a:focus
 	margin-left:500px;
 }
 
-.listearticle
+.listedroite
 {
    float:right;
    background : grey;
    border-radius : 10px;
    padding : 10px;
-   margin-right:-400px;   
+   margin-right:-400px; 
+   margin-top:100px;  
+   width:200px;
+   max-height: 350px;
+   overflow:auto;
+}
+
+.listegauche
+{
+   float:left;
+   background : grey;
+   border-radius : 10px;
+   padding : 10px;     
    width:200px;
    max-height: 350px;
    overflow:auto;
@@ -56,26 +68,23 @@ a:hover, a:focus
 	margin-left:500px;
 }
 
-.login 
+.connexion
 {
-	background:black repeat-x;
-	background-position:top;
-	padding:5px;
-	position:fixed;
-	
-	width:980px;
-	left:0;
-	right:0;
-	top:0;
-	color:#FFF;
-	border-bottom:3px solid #FFF;
-	-moz-opacity:0.5;
-	opacity: 0.5;
-	filter:alpha(opacity=50);
+	float:right;		
+	margin-right:-300px;
+	margin-top: 5px;	
+	display: block;
+	width: 150px;	
 }
 
 .menu
 {	
 	text-decoration:none;
 	margin-top:10px;
+}
+
+#pied
+{
+	margin-top: 150px;
+	text-align: center;
 }

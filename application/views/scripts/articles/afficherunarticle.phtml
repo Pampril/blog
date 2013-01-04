@@ -1,43 +1,41 @@
 <div class = "article">
 	<?php 
-		$affichage = $this->affichage;
-		$compteur = $this->compteur;
 		$listeArticle = $this->listeArticle;
 		$listeCom = $this->listeCom;
 		$count = count($listeCom);
 		
+		//affiche le dernier article
 		if(isset($listeArticle))
+		{?>	
+			<table border="1">
+				<tr>
+					<td><?php echo $listeArticle[1][2];?></td>
+				</tr>
+				<tr>		
+					<td><?php echo $listeArticle[1][0];?></td>		
+				</tr>
+				<tr>
+					<td><?php echo $listeArticle[1][1];?></td>
+				</tr>
+			</table><br/>
+				<?php 
+		}
+		else 
 		{
-	?>
-	
-	<table border="1">
-		<tr>
-			<td><?php echo $listeArticle[1][2];?></td>
-		</tr>
-		<tr>		
-			<td><?php echo $listeArticle[1][0];?></td>		
-		</tr>
-		<tr>
-			<td><?php echo $listeArticle[1][1];?></td>
-		</tr>
-	</table>
-<br/><br/><br/>
-		<?php }
-			  else 
-			  {
-			  	echo 'Aucun article publié';
-			  }		?>
+		 	echo 'Aucun article publié';
+		}		
+		?>
 </div>
-<div class = "commentaire">
-<h><U>Commentaire(s)</U></h><br/><br/>
-	<?php 
-	for ($i = 1; $i <= $count; $i++) {
-	?>
 
-				<?php echo $listeCom[$i][0]; ?> <br />
-				<?php echo $listeCom[$i][1]; ?> <br />
-	<?php
-	}
-	?>
-</div>
-<br/><br/><br/>
+<div class = "commentaire">
+	<h><U>Commentaire(s)</U></h><br/><br/>
+		<?php 
+		for ($i = 1; $i <= $count; $i++) 
+		{?>
+			<U>date :</U> <?php echo $listeCom[$i][0]; ?> <br />
+			<U>auteur :</U> <?php echo $listeCom[$i][1]; ?> <br />
+			<U>commentaire :</U><br><?php echo $listeCom[$i][2]; ?> <br />
+		<?php
+		}
+		?>
+</div><br/>

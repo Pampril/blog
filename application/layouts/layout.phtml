@@ -7,37 +7,41 @@
 		$this->jQuery()->enable();
 		echo $this->jQuery();
 	?>
+	
+	
 </head>
 
 <body>
 	
-	<div id="corps">
-		
-		<div id="entete">
-			<h1><a href="/">Blog</a></h1>		
-		</div>	
-		
-		<div id="content-block-connecte">
+	
+	<div class="connexion">
 			<?php 
 				echo $this->action('login', 'index');
 			?>
-		</div>
+	</div>
+
+	
+	<div id="entete">
+		<h1><a href="/">Blog</a></h1>		
+	</div>
+	
+	<?php 
 		
-		<?php 
 		//on récupére l'instance de zend_auth
     	$auth = Zend_Auth::getInstance();
-    	if ($auth->hasIdentity()){?>
+    	
+    	//on verifie si l'utilisateur est connecté
+    	if ($auth->hasIdentity())
+		{?>
 		<div class="menu">
 			<?php  echo $this->layout()->menu; ?>			
 		</div>	
-		<?php }?> 
-		
-		<div id="contenu">
-			<?php echo $this->layout()->content; ?>
-		</div>	
-		
+	<?php }?> 
+	
+	<div id="contenu">
+		<?php echo $this->layout()->content; ?>
 	</div>
-
+	
 </body>
 
 <footer>

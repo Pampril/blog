@@ -10,8 +10,19 @@ class IndexController extends Zend_Controller_Action
 	
 	public function indexAction()
     {
-    	$this->_helper->actionStack('menu', 'index', 'default', array());    	    	
-    	$this->_helper->actionStack('afficherunarticle','articles','default',array());
+    	$this->_helper->actionStack('menu', 'index', 'default', array());
+    	
+    	$auth = Zend_Auth::getInstance();
+    	
+    	if ($auth->hasIdentity())
+    	{   	    	
+    		$this->_helper->actionStack('affichercommentaire','commentaire','default',array());
+    	}
+    	else
+    	{
+    		$this->_helper->actionStack('afficherunarticle','articles','default',array());
+    	}
+    	
     	$this->_helper->actionStack('afficherlesarticles', 'articles');
     }
     
@@ -27,7 +38,6 @@ class IndexController extends Zend_Controller_Action
 		{
 			try {
 				$db =Zend_Registry::get('db');
-				//credits de l'utilisateur $_post normalement
 				// on récupère les données du formulaire de connexion
 				//et on applique un filtre dessus qui enleve toutes balises
 				//php ou html
@@ -38,8 +48,7 @@ class IndexController extends Zend_Controller_Action
 				//on instancie Zend_Auth
 				$auth = Zend_Auth::getInstance();
 					
-				//charger et parametrer l'adapteur
-				//on peut passer un dernier parametre 'MD5(?)'
+				//charger et parametrer l'adapteur				
 				$dbAdapter = new Zend_Auth_Adapter_DbTable($db,'user','login','mdp');
 					
 				//charger les logs à vérifier

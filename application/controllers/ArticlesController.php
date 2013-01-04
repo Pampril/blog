@@ -108,7 +108,7 @@ class ArticlesController extends Zend_Controller_Action
 	    
 		    //Recupere les commentaires de l'article
 		    $sql2 = '
-		    			select idArticle, commentaire, date
+		    			select idArticle, commentaire, date, auteur
 	    				from commentaires
 	    				WHERE idArticle  = \''.$listeArticle[1][3].'\'';
 	   
@@ -118,7 +118,8 @@ class ArticlesController extends Zend_Controller_Action
 	 	    {
 		    	$compteur2 = $compteur2 + 1;
 		    	$listeCom[$compteur2][0] = $data2['date'];
-		    	$listeCom[$compteur2][1] = $data2['commentaire'];
+		    	$listeCom[$compteur2][1] = $data2['auteur'];
+		    	$listeCom[$compteur2][2] = $data2['commentaire'];
 	 	    	$this->view->listeCom = $listeCom;
 	 	    }
 	 	    $this->_helper->actionStack('ajoutcommentaire', 'commentaire');
@@ -137,7 +138,7 @@ class ArticlesController extends Zend_Controller_Action
     } 
 
     //affiche l'article selectionné dans la liste
-    public function afficherlarticleAction()
+    public function afficherarticleselectAction()
     {   
     	// Récupère l'IdArticle passé en parametre dans l'url
     	$idArticle = $this->_getParam('idArticle');   
@@ -152,7 +153,8 @@ class ArticlesController extends Zend_Controller_Action
     	$db = Zend_Db_Table::getDefaultAdapter();
     	$datas = $db->query($sql)->fetchAll();
     	
-    	foreach ($datas as $data ){
+    	foreach ($datas as $data )
+    	{
     		$listeArticle[1][0] = $data['titre'];
     		$listeArticle[1][1] = $data['corps'];
     		$listeArticle[1][2] = $data['date'];
@@ -169,7 +171,8 @@ class ArticlesController extends Zend_Controller_Action
     
     	$datas2 = $db->query($sql2)->fetchAll();
     	$compteur2 =0;
-    	foreach ($datas2 as $data2 ){
+    	foreach ($datas2 as $data2 )
+    	{
     		$compteur2 = $compteur2 + 1;
     		$listeCom[$compteur2][0] = $data2['date'];
     		$listeCom[$compteur2][1] = $data2['auteur'];
@@ -222,8 +225,7 @@ class ArticlesController extends Zend_Controller_Action
     public function modifierarticleAction()
     {
     	if(isset($_GET['idArticle']))
-    	{
-    		
+    	{    		
     		if($this->_request->isPost())
     		{
     			//on instancie le model article
@@ -235,7 +237,7 @@ class ArticlesController extends Zend_Controller_Action
     			
     			$db = Zend_Db_Table::getDefaultAdapter();
     			$db->update('articles',$data,'id ='.$_GET['idArticle']);
-    		
+    			$this->_redirect('/index/index');
     		}
     		else 
     		{

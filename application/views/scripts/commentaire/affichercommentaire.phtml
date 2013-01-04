@@ -4,9 +4,19 @@
 		$lesCommentaires = $this->lesCommentaires;
 		foreach($lesCommentaires as $unCommentaire)
 		{ ?>
-		<?php echo $unCommentaire->date;?><br/><br/>	
-		<?php //echo $unCommentaire->auteur; ?><br/><br/>	
-		<?php echo $unCommentaire->commentaire; ?><br/>	<br/>	
+		
+			<?php echo $unCommentaire->date;?><br/>
+				
+		<?php echo $unCommentaire->auteur; ?><br/><br/>	
+		<?php echo $unCommentaire->commentaire; ?><br/>	<br/>
+		<a 
+  			href="<?php echo $this->baseUrl('commentaire/modifierlecommentaire')."?idCommentaire=$unCommentaire->id" ?>">
+  			Modifier	
+  		</a>
+  		<a 
+  			href="<?php echo $this->baseUrl('commentaire/supprimercommentaire')."?idCommentaire=$unCommentaire->id" ?>">
+  			Supprimer	
+  		</a><br/>
 					___________________<br/>	
 <?php  } ?>
 
