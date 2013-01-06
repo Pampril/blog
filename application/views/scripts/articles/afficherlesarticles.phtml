@@ -20,13 +20,15 @@ else
 	  	foreach($lesArticles as $unArticle) 
 	  	{ 
 	  		if ($auth->hasIdentity())
-	  		{?>			  		
+	  		{?>
+	  						  		
 		  		<a 
 		  			href="<?php echo $this->baseUrl('articles/afficherarticleselect')."?idArticle=$unArticle->id" ?>">
-					<?php echo $unArticle->date; ?><br/>
-				</a>
-						
-				<?php echo $unArticle->titre;?><br/>		
+					Numero de l'article : <?php echo $unArticle->id;?>
+				</a><br/>
+				
+				<U>Date :</U> <?php echo $unArticle->date; ?><br/>		
+				<U>Titre :</U> <?php echo $unArticle->titre;?><br/>		
 		
 			  	<a 
 		  			href="<?php echo $this->baseUrl('articles/supprimerarticle')."?idArticle=$unArticle->id" ?>">

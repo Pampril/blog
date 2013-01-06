@@ -6,42 +6,27 @@ class CommentaireController extends Zend_Controller_Action
 	public function indexAction()
 	{
 		
-	     $valeur = $this->_getParam('valeur');
-	    
-	     if(isset($valeur))
-	     {
-	     	switch ($valeur)
-	    	 {
-			     case "ajoutcommentaire":
-			     $this->_helper->actionStack('ajoutcommentaire', 'commentaire', 'default', array());
-			     break;
-			     case "affichercommentaire":
-			     $this->_helper->actionStack('affichercommentaire', 'commentaire', 'default', array());
-			     break;
-		     }
-	     }	    
+	       
 	}
 	
 	public function affichercommentaireAction()
 	{
-		//affiche les commentaires
+		//récupére les commentaires
 		$commentaire = new Commentaire;
 		$lesCommentaires = $commentaire->fetchAll();
-	
+		//envoi les résultat à la vue
 		$this->view->lesCommentaires=$lesCommentaires;
 	
 	}	
 	
 	public function ajoutcommentaireAction()
 	{		
-		//Instancie le form créer
+		//Instancie le formulaire AjoutCommentaire
 		$formAjoutCommentaire= new AjoutCommentaire;
-
+		//Instancie le model Commentaire
 		$class_commentaire= new Commentaire;
-		
-		$idArticle = $this->_getParam('idArticle');
-		
-		
+		//récupére l'id article passé dans l'url
+		$idArticle = $this->_getParam('idArticle');		
 		
 		// Selectionne le dernier article qui peut etre publié
 		$sql = 'select id
@@ -57,30 +42,27 @@ class CommentaireController extends Zend_Controller_Action
 		{			
 			$db = Zend_Db_Table::getDefaultAdapter();
 			$datas = $db->query($sql)->fetchAll();
-			foreach ($datas as $data ){
+			foreach ($datas as $data )
+			{
 				$idArticle = $data['id'];
 			}
 		}	
 		
 		if(!$this->getRequest()->getPost())
 		{
-			//Envoie a la vue le form
-			$this->view->assign('form_ajout_commentaire',$formAjoutCommentaire);
+			//Envoie le formulaire à la vue
+			$this->view->assign('formAjoutCommentaire',$formAjoutCommentaire);
 		}
 		else
 		{
 			// on récupère les données du formulaire
 			$data = $this->getRequest()->getPost();		
 			$data["idArticle"] = $idArticle;
-			//Verif des donnée du formulaire
+			//Verifie les donnée du formulaire
 			if($formAjoutCommentaire->isValid($data)==true)
 			{
-				// on récupère les infos du formulaire
-				if(isset($data['auteur'])
-						&& isset($data['date'])
-						&& isset($data['commentaire'])
-						&& isset($data["idArticle"])) 
-					 
+				//Récupère les infos du formulaire
+				if(isset($data['auteur']) && isset($data['date'])	&& isset($data['commentaire'])	&& isset($data["idArticle"]))					 
 				{
 					$auteur= $data['auteur'];
 					$dateCommentaire= $data['date'];
@@ -93,49 +75,48 @@ class CommentaireController extends Zend_Controller_Action
 					$auteur= "";
 					$dateCommentaire= "";
 					$commentaire = "";
-					$idArticle = "";
-					//echo $idArticle;
+					$idArticle = "";					
 				}
-				if($auteur!= "" 
-					&& $dateCommentaire!= ""
-					&& $commentaire != ""
-					&& $idArticle != "")
-				{	//echo'test3';					
+				if($auteur!= ""	&& $dateCommentaire!= "" && $commentaire != "" && $idArticle != "")
+				{						
 					//AJOUT DANS LA BD
 					$ajoutCommentaire= $class_commentaire->createRow($data);
 					$ajoutCommentaire->save();
 					//Envoie a la vue le form
-					$this->view->assign('form_ajout_commentaire',$formAjoutCommentaire);
-					$Done = true;
-					$this->view->Done = $Done;
+					$this->view->assign('formAjoutCommentaire',$formAjoutCommentaire);
+					$Valide = true;
+					$this->view->Valide = $Valide;
 				}
 			}
 			else
 			{
+				//remplie le formulaire avec les données existante
 				$formAjoutCommentaire->populate($data);
 				//Envoie a la vue le form
-				$this->view->assign('form_ajout_commentaire',$formAjoutCommentaire);
+				$this->view->assign('formAjoutCommentaire',$formAjoutCommentaire);
 		
 			}
 		}		
 	}
 	
-	//affiche l'article selectionné dans la liste
+	//affiche le commentaire cliké dans la liste
 	public function afficherlecommentaireAction()
 	{
-		// Récupère l'IdArticle passé en parametre dans l'url
+		// Récupère l'IdCommentaire passé en parametre dans l'url
 		$idCommentaire = $this->_getParam('idCommentaire');
 	
 	
-		// Selectionne l'article qui a été cliqué
+		// Selectionne le commentaire qui a été cliqué
 		$sql = "select id, auteur, commentaire, date
 		from commentaires
 		WHERE id = $idCommentaire ;";
 	
 	
 		$db = Zend_Db_Table::getDefaultAdapter();
+		//récupére les données
 		$datas = $db->query($sql)->fetchAll();
-		 
+		
+		//rempli un tableau avec les données
 		foreach ($datas as $data )
 		{
 			$listeCommentaire[1][0] = $data['auteur'];
@@ -144,6 +125,7 @@ class CommentaireController extends Zend_Controller_Action
 			$listeCommentaire[1][3] = $data['id'];
 	
 		}
+		//envoi le tableau à la vue
 		$this->view->lesCommentaires = $listeCommentaire;		
 		
 	}
@@ -151,8 +133,7 @@ class CommentaireController extends Zend_Controller_Action
 	public function modifierlecommentaireAction()
 	{
 		if(isset($_GET['idCommentaire']))
-		{
-	
+		{	
 			if($this->_request->isPost())
 			{
 				//on instancie le model commentaire
@@ -168,7 +149,7 @@ class CommentaireController extends Zend_Controller_Action
 			}
 			else
 			{
-				// Selectionne le commentaire qui a été cliqué
+				// Selectionne le commentaire qui a été cliké
 				$sql = 'select *
     			from commentaires
     			WHERE id = '.$_GET['idCommentaire'].' ;';
@@ -178,6 +159,7 @@ class CommentaireController extends Zend_Controller_Action
 	
 				//Instancie le formulaire créé
 				$form = new AjoutCommentaire;
+				//remplie le formulaire avec les données déjà existantes
 				$form->populate($datas);
 				echo $form;
 			}			
@@ -192,15 +174,17 @@ class CommentaireController extends Zend_Controller_Action
     	
     	//récupére les commentaires
     	$lesCommentaires = $class_commentaire->fetchAll();
+    	//on récupére l'id du commentaire passé dans l'url
     	$idCommentaire = $this->_getParam('idCommentaire');
     	
     	$this->view->lesCommentaires=$lesCommentaires;    	
     	
-    	//supprimer un article
+    	//supprimer un commentaire
     	foreach($lesCommentaires as $unCommentaire)
     	{    				
     		if($idCommentaire ==$unCommentaire->id)
     		{
+    			//supprime le commentaire selectionné
     			$class_commentaire->find($unCommentaire->id)->current()->delete();    			
     			//renvoi sur l'index
     			$this->_redirect('/index/index');

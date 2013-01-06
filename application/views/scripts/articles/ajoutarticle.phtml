@@ -1,14 +1,25 @@
 <div class= "FormulaireArt">
 <?php
 
-	if($this->Done != true)
-	{	
-		echo $this->form_ajout_article;
-	}
-	if($this->Done == true)
+	if($this->Valide != true)
+	{?>
+		<div id = "titre" contenteditable="true">
+			Ceci est un titre
+		</div>
+		<div id = "corps" contenteditable="true">
+			Ceci est un article
+		</div>
+			<? echo $this->formAjoutArticle;?>
+			
+		
+	<?php }
+	if($this->Valide == true)
 	{
-		echo 'Article enregistré'; 	
-	}
+		echo 'Article enregistré';?> 	
+		<a href= <?php $this->baseUrl('/index/index');?>>Retour</a>
+<?php }
 
 ?>
 </div>
+
+ 

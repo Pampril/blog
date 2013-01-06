@@ -4,20 +4,7 @@ class ArticlesController extends Zend_Controller_Action
 {
 	public function indexAction()
     {    	
-    	$valeur = $this->_getParam('valeur');
-    	
-    	if(isset($valeur))
-    	{
-    		switch ($valeur)
-    		{
-    			case "ajoutarticle":
-    				$this->_helper->actionStack('ajoutarticle', 'articles', 'default', array());
-    				break;
-    			case "afficherarticle":
-    				$this->_helper->actionStack('afficherlesarticles', 'articles', 'default', array());
-    				break;    			
-    		}    		
-    	}    	
+    		
     }    
     //Formulaire d'ajout d'article
     public function ajoutarticleAction()
@@ -25,73 +12,51 @@ class ArticlesController extends Zend_Controller_Action
     	//Instancie le formulaire
 		$formAjoutArticle = new AjoutArticle;
 		
-		//Instancie le formulaire créé
+		//Instancie le model
 		$article = new Articles;
 		
 		if(!$this->getRequest()->getPost())
 		{
-			//Envoie a la vue le form
-			$this->view->assign('form_ajout_article',$formAjoutArticle);
+			//Envoie le formulaire à la vue
+			$this->view->assign('formAjoutArticle',$formAjoutArticle);			
 		}
 		else
-		{
-			// on récupère les données du formulaire
-			$data = $this->getRequest()->getPost();			
-			
-			//Verif des donnée du formulaire
-			if($formAjoutArticle->isValid($data)==true)
-			{
-				// on récupère les infos du formulaire
-				if(isset($data['titre']) && isset($data['date']) && isset($data['corps']))//&& isset($data['publication']))  
-				{
-					$dateArticle = $data['date'];
-					$titreArticle = $data['titre'];					
-					$corps = $data['corps'];
-					$publication = $data['publication'];									
-				}
-				else
-				{
-					$dateArticle = "";
-					$titreArticle = "";					
-					$corps = "";
-					$publication = "";
-				}
-				if($titreArticle != "" && $dateArticle != "" && $corps != ""&& $publication != "")					
-				{					
-					//AJOUT DANS LA BD
-					$ajoutArticle = $article->createRow($data);
-					$ajoutArticle->save();
-					//Envoie a la vue le form
-					$this->view->assign('form_ajout_article',$formAjoutArticle);
-					$Valide = true;
-					$this->view->Done = $Valide;
-				}
-			}
-			else
-			{
-				$formAjoutArticle->populate($data);
-				//Envoie a la vue le form
-				$this->view->assign('form_ajout_article',$formAjoutArticle);
-		
-			}
+		{							
+			//Sauvegarde des données dans la base
+			$post = $this->getRequest()->getPost();
+			$data = $article->createRow();
+			$data -> titre = $post['titre'];
+			$data -> date = $post['date'];
+			$data -> corps = $post['corps'];
+			$data -> publication = $post['publication'];
+			$data -> save();
+	
+			////Envoie le formulaire à la vue
+			$this->view->assign('formAjoutArticle',$formAjoutArticle);					
+			$Valide = true;
+			$this->view->Valide = $Valide;						
 		}
+		//Affiche la liste des images
+		$this->_helper->actionStack('listeimages', 'images');
     }
-    //Affichage du dernier article
+    
+    //Affichage du dernier article publié
     public function afficherunarticleAction()
     {   
-    	// Selectionne le dernier article	
+    	// Selectionne le dernier article publié	
     	$sql = 'select id, titre, corps, date
 		from articles 
 		WHERE id IN (select id
-							from articles 
-							where id IN (select MAX( id ) 
-												from articles 
-												WHERE `publication` != 0))
-												GROUP BY `id`;';
+					from articles 
+					where id IN (select MAX( id ) 
+								from articles 
+								WHERE `publication` != 0))
+								GROUP BY `id`;';
     	
     	$db = Zend_Db_Table::getDefaultAdapter();
     	$datas = $db->query($sql)->fetchAll();
 	    
+    	//remplie un tableau avec les datas
 	    foreach ($datas as $data )
 	    {
 	    		$listeArticle[1][2] = $data['date'];
@@ -103,17 +68,19 @@ class ArticlesController extends Zend_Controller_Action
 	    
 	    if(!empty($datas))
 	    {
+	    	//envoi le tableau à la vue
 	    	$this->view->listeArticle = $listeArticle;
 	    
 	    
 		    //Recupere les commentaires de l'article
-		    $sql2 = '
-		    			select idArticle, commentaire, date, auteur
+		    $sql2 = '	select idArticle, commentaire, date, auteur
 	    				from commentaires
 	    				WHERE idArticle  = \''.$listeArticle[1][3].'\'';
 	   
 		    $datas2 = $db->query($sql2)->fetchAll();
 		    $compteur2 =0;
+		    
+		    //remplie un tableau avec les datas
 	 	    foreach ($datas2 as $data2 )
 	 	    {
 		    	$compteur2 = $compteur2 + 1;
@@ -122,6 +89,7 @@ class ArticlesController extends Zend_Controller_Action
 		    	$listeCom[$compteur2][2] = $data2['commentaire'];
 	 	    	$this->view->listeCom = $listeCom;
 	 	    }
+	 	    //affiche le formulaire d'ajout de commentaire
 	 	    $this->_helper->actionStack('ajoutcommentaire', 'commentaire');
       	}
      }
@@ -132,12 +100,12 @@ class ArticlesController extends Zend_Controller_Action
     	//affiche les articles 
     	$article = new Articles;
     	$lesArticles = $article->fetchAll();
-    	   		
+    	//envoi le résultat à la vue   		
     	$this->view->lesArticles=$lesArticles;
     		
     } 
 
-    //affiche l'article selectionné dans la liste
+    //affiche l'article cliké
     public function afficherarticleselectAction()
     {   
     	// Récupère l'IdArticle passé en parametre dans l'url
@@ -153,6 +121,7 @@ class ArticlesController extends Zend_Controller_Action
     	$db = Zend_Db_Table::getDefaultAdapter();
     	$datas = $db->query($sql)->fetchAll();
     	
+    	//remplie un tableau avec les datas
     	foreach ($datas as $data )
     	{
     		$listeArticle[1][0] = $data['titre'];
@@ -161,6 +130,7 @@ class ArticlesController extends Zend_Controller_Action
     		$listeArticle[1][3] = $data['id'];
     
     	}
+    	//envoi le tableau à la vue
     	$this->view->listeArticle = $listeArticle;
     
     	//Recupere les commentaires de l'article
@@ -171,17 +141,21 @@ class ArticlesController extends Zend_Controller_Action
     
     	$datas2 = $db->query($sql2)->fetchAll();
     	$compteur2 =0;
+    	
+    	//remplie un tableau avec les datas
     	foreach ($datas2 as $data2 )
     	{
     		$compteur2 = $compteur2 + 1;
     		$listeCom[$compteur2][0] = $data2['date'];
     		$listeCom[$compteur2][1] = $data2['auteur'];
     		$listeCom[$compteur2][2] = $data2['commentaire'];
-    		$this->view->listeCom = $listeCom;
+    		//envoi le tableau à la vue
+    		$this->view->listeCom = $listeCom;    		
     	}
+    	
     }
     
-    //Suppression d'un article   
+    //Suppression d'un article et de ses commentaires
     public function supprimerarticleAction()
     {        	
     	//on instancie le model article
@@ -192,7 +166,7 @@ class ArticlesController extends Zend_Controller_Action
     	//affiche les articles
     	$lesArticles = $class_article->fetchAll();
     	$idArticle = $this->_getParam('idArticle');
-    	
+    	//envoi les données à la vue
     	$this->view->lesArticles=$lesArticles;    	
     	
     	//supprimer un article
@@ -202,7 +176,7 @@ class ArticlesController extends Zend_Controller_Action
     		{
     			$class_article->find($unArticle->id)->current()->delete();    			
     			
-    			
+    			//selectionne l'article correpondand a l'id passé dans l'url
     			$sql='select * from commentaires where idArticle='.$idArticle.';';
     			
     			$db = Zend_Db_Table::getDefaultAdapter();
@@ -210,12 +184,12 @@ class ArticlesController extends Zend_Controller_Action
     			
     			Zend_Debug::dump($suppressionCommentaire);
     			
-    			
+    			//supprime le commentaire
     			foreach($suppressionCommentaire as $unCommentaire)
     			{
-    				$class_commentaire->find($unCommentaire['id'])->current()->delete();
-    				   				
+    				$class_commentaire->find($unCommentaire['id'])->current()->delete();    				   				
     			}
+    			//renvoi à l'index
     			$this->_redirect('/index/index');
     		} 			  
     	}    	
@@ -229,7 +203,9 @@ class ArticlesController extends Zend_Controller_Action
     		if($this->_request->isPost())
     		{
     			//on instancie le model article
-    			$class_article = new Articles;    			
+    			$class_article = new Articles; 
+    			
+    			//récupére les données du post   			
     			$data=array('titre'=>$this->_request->getPost('titre'),
     					'date'=>$this->_request->getPost('date'),
     					'corps'=>$this->_request->getPost('corps'),
@@ -241,16 +217,14 @@ class ArticlesController extends Zend_Controller_Action
     		}
     		else 
     		{
-    			// Selectionne l'article qui a été cliqué
-    			$sql = 'select *
-    			from articles
-    			WHERE id = '.$_GET['idArticle'].' ;';
-    			
+    			// Selectionne l'article qui a été cliké
+    			$sql = 'select * from articles WHERE id = '.$_GET['idArticle'].' ;';    			
     			$db = Zend_Db_Table::getDefaultAdapter();
     			$datas = $db->query($sql)->fetch();
     			 
     			//Instancie le formulaire créé
     			$form = new AjoutArticle;
+    			//remplie le formulaire avec les données existante
     			$form->populate($datas);
     			echo $form;
     		}

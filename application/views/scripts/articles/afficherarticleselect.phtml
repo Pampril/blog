@@ -4,7 +4,7 @@
 		$listeCom = $this->listeCom;
 		$count = count($listeCom);
 	?>
-	
+	<h1><U>Article</U></h1>
 	<table border="1">
 		<tr>
 			<?php echo $listeArticle[1][0]; ?>
@@ -20,15 +20,16 @@
 </div><br/>
 
 <div class = "commentaire">
+<h2><U>Commentaire(s)</U></h2>
 	<table>
 		<?php		
 		for ($i = 1; $i <= $count; $i++) 
 		{?>
 			<tr>
 				<td>	
-					<?php echo $listeCom[$i][0];?><br />	
-					<?php echo $listeCom[$i][1]; ?> <br />
-					<?php echo	$listeCom[$i][2]; ?> 
+					Date : <?php echo $listeCom[$i][0];?><br />	
+					Auteur : <?php echo $listeCom[$i][1]; ?> <br />
+					Commentaire : <?php echo	$listeCom[$i][2]; ?> 
 				</td>	
 			</tr>
 		<?php
@@ -36,7 +37,7 @@
 	</table>
 </div><br />
 
- <div class = "FormulaireCom">
+ <div class = "FormulaireCom2">
 	<?php 
 		echo $this->action('ajoutcommentaire', 'commentaire');
 	?><br/>

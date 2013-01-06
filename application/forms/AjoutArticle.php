@@ -32,20 +32,6 @@ class AjoutArticle extends Zend_Form
 		$Date->setValue (date("Y-m-d H:m:s"));
 		$Date->setRequired(true);
 		
-		//Champ du titre de l'Article
-		$Titre = new Zend_Form_Element_Text('titre');
-		$Titre->setLabel('Titre :');
-		$Titre->setValue("Ceci est le Titre");
-		$Titre->setRequired(true);		
-
-		//Champ du corps
-		$Corps = new Zend_Form_Element_Textarea('corps');
-		$Corps->setLabel("Article :");
-		$Corps->setValue("Ceci est le Corps");
-		$Corps->setRequired(true);
-		
-		
-			
 		//Champ pour le choix de publication ou non
 		$Publier = new Zend_Form_Element_Checkbox(array(
 			'name'		=> 'publication',
@@ -56,15 +42,14 @@ class AjoutArticle extends Zend_Form
 		$Publier->setRequired(true);
 		$Publier->setDecorators($decorators_input);	
 
-		//Instancie un element type submit
-		$Submit = new Zend_Form_Element_Submit('Enregistrer');
+		//Instancie un element type button
+		 $button = new Zend_Form_Element_Button('valider', array('onclick' => 'javascript:save();redirect();'));
+        $button->setValue('Envoyer');
 
 		//Ajout des élément dans le formulaire
-		$this->addElement($Date);
-		$this->addElement($Titre);
-		$this->addElement($Corps);
+ 		$this->addElement($Date);
 		$this->addElement($Publier);
-		$this->addElement($Submit);
+		$this->addElement($button);
 			
 		//Instancie class article
 		$ligneInstance = new Articles;

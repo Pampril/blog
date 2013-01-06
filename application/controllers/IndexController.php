@@ -10,10 +10,11 @@ class IndexController extends Zend_Controller_Action
 	
 	public function indexAction()
     {
+    	//affiche le menu
     	$this->_helper->actionStack('menu', 'index', 'default', array());
-    	
+    	//on instancie Zend_Auth
     	$auth = Zend_Auth::getInstance();
-    	
+    	//verifie si on est connecté
     	if ($auth->hasIdentity())
     	{   	    	
     		$this->_helper->actionStack('affichercommentaire','commentaire','default',array());
@@ -38,12 +39,10 @@ class IndexController extends Zend_Controller_Action
 		{
 			try {
 				$db =Zend_Registry::get('db');
-				// on récupère les données du formulaire de connexion
-				//et on applique un filtre dessus qui enleve toutes balises
-				//php ou html
-				$f = new Zend_Filter_StripTags();
-				$login = $f->filter($this->_request->getPost('login'));
-				$password = $f->filter($this->_request->getPost('mdp'));
+				// on récupère les données du formulaire de connexion et on applique un filtre dessus qui enleve toutes les balises php ou html
+				$filtre = new Zend_Filter_StripTags();
+				$login = $filtre->filter($this->_request->getPost('login'));
+				$password = $filtre->filter($this->_request->getPost('mdp'));
 					
 				//on instancie Zend_Auth
 				$auth = Zend_Auth::getInstance();
@@ -51,7 +50,7 @@ class IndexController extends Zend_Controller_Action
 				//charger et parametrer l'adapteur				
 				$dbAdapter = new Zend_Auth_Adapter_DbTable($db,'user','login','mdp');
 					
-				//charger les logs à vérifier
+				//charge les données à vérifier
 				$dbAdapter->setIdentity($login);
 				$dbAdapter->setCredential($password);
 					

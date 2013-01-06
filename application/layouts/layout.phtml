@@ -6,6 +6,10 @@
 	<?php   
 		$this->jQuery()->enable();
 		echo $this->jQuery();
+
+		$this->headScript()->appendFile($this->baseUrl('js/save.js',
+				'text/javascript'));
+		echo $this->headScript();
 	?>
 	
 	

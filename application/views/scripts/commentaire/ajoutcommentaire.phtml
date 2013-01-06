@@ -1,15 +1,15 @@
 <div class = "FormulaireCom">
 <?php
-	if($this->Done !=true)
+	if($this->Valide !=true)
 	{
-		echo $this->form_ajout_commentaire;
+		echo $this->formAjoutCommentaire;
 	}
 		
-	if($this->Done == true)
+	if($this->Valide == true)
 	{
-		echo 'Ajout effectué dans la base de donnée';
-		
-	}
+		echo 'Commentaire enregistré';?>
+		<a href= <?php $this->baseUrl('/index/index');?>>Retour</a>
+	<?php }
 
 ?>
 </div>
