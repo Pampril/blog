@@ -16,7 +16,7 @@ class ImagesController extends Zend_Controller_Action
 			//récup les données formulaire			
 			$fichier=$form->getValues();
 			
-			$upload = PUBLIC_PATH.'/img/uploads'.$fichier['image'];				
+			$upload = '/img/uploads/'.$fichier['image'];				
 			
 			$data['destination'] = $upload ;
 			
@@ -30,6 +30,17 @@ class ImagesController extends Zend_Controller_Action
 			echo $form;
 			
 		}
+	}
+	
+	//affichage de la liste des images
+	public function listeimagesAction()
+	{
+		//affiche des images
+		$image = new Images;
+		$lesImages = $image->fetchAll();
+	
+		$this->view->lesImages=$lesImages;
+	
 	}
 
 }
